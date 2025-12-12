@@ -68,6 +68,15 @@ class BootControlAndroid final : public BootControlInterface {
  private:
   std::unique_ptr<android::hal::BootControlClient> module_;
   std::unique_ptr<DynamicPartitionControlAndroid> dynamic_control_;
+  // Cache values read from the BootControl HAL at Init() time.
+  // This avoids invoking HIDL/AIDL calls that return plain values (e.g.
+  // getCurrentSlot()) during critical paths, which can abort the process if the
+  // remote service dies (DEAD_OBJECT) and a failed HIDL return value is
+  // accidentally retrieved.
+  unsigned int num_slots_{0};
+  Slot current_slot_{BootControlInterface::kInvalidSlot};
+  bool active_slot_supported_{false};
+  Slot active_boot_slot_{BootControlInterface::kInvalidSlot};
 
   friend class BootControlAndroidTest;
   friend class UpdateAttempterAndroidIntegrationTest;
