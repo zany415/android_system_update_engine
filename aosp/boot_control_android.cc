@@ -63,18 +63,33 @@ bool BootControlAndroid::Init() {
 
   LOG(INFO) << "Loaded boot control hal.";
 
+  // Cache values early while the service is expected to be alive.
+  num_slots_ = module_->GetNumSlots();
+  current_slot_ = module_->GetCurrentSlot();
+  if (num_slots_ == 0 || current_slot_ >= num_slots_) {
+    LOG(ERROR) << "Invalid current slot " << current_slot_
+               << " (num_slots=" << num_slots_ << ")";
+    current_slot_ = kInvalidSlot;
+    return false;
+  }
+
+  // Default to current slot as the active slot.
+  active_boot_slot_ = current_slot_;
+  active_slot_supported_ =
+      module_->GetVersion() >= android::hal::BootControlVersion::BOOTCTL_V1_2;
+
   dynamic_control_ =
-      std::make_unique<DynamicPartitionControlAndroid>(GetCurrentSlot());
+      std::make_unique<DynamicPartitionControlAndroid>(current_slot_);
 
   return true;
 }
 
 unsigned int BootControlAndroid::GetNumSlots() const {
-  return module_->GetNumSlots();
+  return num_slots_;
 }
 
 BootControlInterface::Slot BootControlAndroid::GetCurrentSlot() const {
-  return module_->GetCurrentSlot();
+  return current_slot_;
 }
 
 bool BootControlAndroid::GetPartitionDevice(const std::string& partition_name,
@@ -128,6 +143,9 @@ bool BootControlAndroid::SetActiveBootSlot(Slot slot) {
     LOG(ERROR) << "Unable to set the active slot to slot " << SlotName(slot)
                << ": " << result.errMsg.c_str();
   }
+  if (result.success && active_slot_supported_) {
+    active_boot_slot_ = slot;
+  }
   return result.success;
 }
 
@@ -156,8 +174,8 @@ bool BootControlAndroid::IsSlotMarkedSuccessful(
 }
 
 Slot BootControlAndroid::GetActiveBootSlot() {
-  if (module_->GetVersion() >= android::hal::BootControlVersion::BOOTCTL_V1_2) {
-    return module_->GetActiveBootSlot();
+  if (active_slot_supported_) {
+    return active_boot_slot_;
   }
   LOG(WARNING) << "BootControl module version is lower than 1.2, "
                << __FUNCTION__ << " failed";
