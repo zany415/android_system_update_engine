@@ -80,6 +80,48 @@ const off_t kReadFileBufferSize = 128 * 1024;
 constexpr float kVerityProgressPercent = 0.3;
 constexpr float kEncodeFECPercent = 0.3;
 
+/* Started by Cursor ubuntu 20251226055221243 */
+std::string NormalizePartitionNameForErrorMapping(std::string name) {
+  // Some platforms may append slot suffixes (e.g. "_a"/"_b") to the partition
+  // name. Strip them to map to a stable base name.
+  if (name.size() > 2 && name[name.size() - 2] == '_' &&
+      (name.back() == 'a' || name.back() == 'b')) {
+    name.resize(name.size() - 2);
+  }
+  return name;
+}
+
+ErrorCode PartitionTargetHashMismatchErrorCode(const std::string& part_name) {
+  const std::string normalized = NormalizePartitionNameForErrorMapping(part_name);
+  if (normalized == "system") return ErrorCode::kNewPartitionVerificationErrorSystem;
+  if (normalized == "vendor") return ErrorCode::kNewPartitionVerificationErrorVendor;
+  if (normalized == "product") return ErrorCode::kNewPartitionVerificationErrorProduct;
+  if (normalized == "system_ext")
+    return ErrorCode::kNewPartitionVerificationErrorSystemExt;
+  if (normalized == "odm") return ErrorCode::kNewPartitionVerificationErrorOdm;
+  if (normalized == "vendor_dlkm")
+    return ErrorCode::kNewPartitionVerificationErrorVendorDlkm;
+  if (normalized == "system_dlkm")
+    return ErrorCode::kNewPartitionVerificationErrorSystemDlkm;
+  if (normalized == "boot") return ErrorCode::kNewPartitionVerificationErrorBoot;
+  if (normalized == "vendor_boot")
+    return ErrorCode::kNewPartitionVerificationErrorVendorBoot;
+  if (normalized == "init_boot")
+    return ErrorCode::kNewPartitionVerificationErrorInitBoot;
+  if (normalized == "dtbo") return ErrorCode::kNewPartitionVerificationErrorDtbo;
+  if (normalized == "vbmeta")
+    return ErrorCode::kNewPartitionVerificationErrorVbmeta;
+  if (normalized == "vbmeta_system")
+    return ErrorCode::kNewPartitionVerificationErrorVbmetaSystem;
+  if (normalized == "vbmeta_vendor")
+    return ErrorCode::kNewPartitionVerificationErrorVbmetaVendor;
+  if (normalized == "recovery")
+    return ErrorCode::kNewPartitionVerificationErrorRecovery;
+  // Fallback for unknown partitions to preserve previous behavior.
+  return ErrorCode::kNewRootfsVerificationError;
+}
+/* Ended by Cursor ubuntu 20251226055221243 */
+
 }  // namespace
 
 void FilesystemVerifierAction::PerformAction() {
@@ -487,9 +529,17 @@ void FilesystemVerifierAction::FinishPartitionHashing() {
       if (partition.target_hash != hasher_->raw_hash()) {
         LOG(ERROR) << "New '" << partition.name
                    << "' partition verification failed.";
+        /* Started by Cursor ubuntu 20251226055221243 */
+        const ErrorCode mismatch_code =
+            PartitionTargetHashMismatchErrorCode(partition.name);
+        LOG(ERROR) << "Target partition hash mismatch recorded: partition='"
+                   << partition.name << "' mapped_error_code=" << mismatch_code;
+        /* Ended by Cursor ubuntu 20251226055221243 */
         if (partition.source_hash.empty()) {
           // No need to verify source if it is a full payload.
-          Cleanup(ErrorCode::kNewRootfsVerificationError);
+          /* Started by Cursor ubuntu 20251226055221243 */
+          Cleanup(mismatch_code);
+          /* Ended by Cursor ubuntu 20251226055221243 */
           return;
         }
         // If we have not verified source partition yet, now that the target
@@ -535,7 +585,9 @@ void FilesystemVerifierAction::FinishPartitionHashing() {
       // error code to reflect the error in target partition. We only need to
       // verify the source partition which the target hash does not match, the
       // rest of the partitions don't matter.
-      Cleanup(ErrorCode::kNewRootfsVerificationError);
+      /* Started by Cursor ubuntu 20251226055221243 */
+      Cleanup(PartitionTargetHashMismatchErrorCode(partition.name));
+      /* Ended by Cursor ubuntu 20251226055221243 */
       return;
   }
   // Start hashing the next partition, if any.

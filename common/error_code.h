@@ -117,6 +117,27 @@ enum class ErrorCode : int {
   // errors are aggregated into one: kOmahaErrorInHTTPResponse.
   kOmahaRequestHTTPResponseBase = 2000,  // + HTTP response code
 
+  /* Started by Cursor ubuntu 20251226055221243 */
+  // Partition-specific target partition hash verification failures.
+  // NOTE: Values must be < kOmahaRequestHTTPResponseBase to avoid being treated
+  // as encoded HTTP status codes.
+  kNewPartitionVerificationErrorSystem = 1000,
+  kNewPartitionVerificationErrorVendor = 1001,
+  kNewPartitionVerificationErrorProduct = 1002,
+  kNewPartitionVerificationErrorSystemExt = 1003,
+  kNewPartitionVerificationErrorOdm = 1004,
+  kNewPartitionVerificationErrorVendorDlkm = 1005,
+  kNewPartitionVerificationErrorSystemDlkm = 1006,
+  kNewPartitionVerificationErrorBoot = 1007,
+  kNewPartitionVerificationErrorVendorBoot = 1008,
+  kNewPartitionVerificationErrorInitBoot = 1009,
+  kNewPartitionVerificationErrorDtbo = 1010,
+  kNewPartitionVerificationErrorVbmeta = 1011,
+  kNewPartitionVerificationErrorVbmetaSystem = 1012,
+  kNewPartitionVerificationErrorVbmetaVendor = 1013,
+  kNewPartitionVerificationErrorRecovery = 1014,
+  /* Ended by Cursor ubuntu 20251226055221243 */
+
   // TODO(jaysri): Move out all the bit masks into separate constants
   // outside the enum as part of fixing bug 34369.
   // Bit flags. Remember to update the mask below for new bits.

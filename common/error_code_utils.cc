@@ -121,6 +121,38 @@ string ErrorCodeToString(ErrorCode code) {
       return "ErrorCode::kUmaReportedMax";
     case ErrorCode::kOmahaRequestHTTPResponseBase:
       return "ErrorCode::kOmahaRequestHTTPResponseBase";
+    /* Started by Cursor ubuntu 20251226055221243 */
+    case ErrorCode::kNewPartitionVerificationErrorSystem:
+      return "ErrorCode::kNewPartitionVerificationErrorSystem";
+    case ErrorCode::kNewPartitionVerificationErrorVendor:
+      return "ErrorCode::kNewPartitionVerificationErrorVendor";
+    case ErrorCode::kNewPartitionVerificationErrorProduct:
+      return "ErrorCode::kNewPartitionVerificationErrorProduct";
+    case ErrorCode::kNewPartitionVerificationErrorSystemExt:
+      return "ErrorCode::kNewPartitionVerificationErrorSystemExt";
+    case ErrorCode::kNewPartitionVerificationErrorOdm:
+      return "ErrorCode::kNewPartitionVerificationErrorOdm";
+    case ErrorCode::kNewPartitionVerificationErrorVendorDlkm:
+      return "ErrorCode::kNewPartitionVerificationErrorVendorDlkm";
+    case ErrorCode::kNewPartitionVerificationErrorSystemDlkm:
+      return "ErrorCode::kNewPartitionVerificationErrorSystemDlkm";
+    case ErrorCode::kNewPartitionVerificationErrorBoot:
+      return "ErrorCode::kNewPartitionVerificationErrorBoot";
+    case ErrorCode::kNewPartitionVerificationErrorVendorBoot:
+      return "ErrorCode::kNewPartitionVerificationErrorVendorBoot";
+    case ErrorCode::kNewPartitionVerificationErrorInitBoot:
+      return "ErrorCode::kNewPartitionVerificationErrorInitBoot";
+    case ErrorCode::kNewPartitionVerificationErrorDtbo:
+      return "ErrorCode::kNewPartitionVerificationErrorDtbo";
+    case ErrorCode::kNewPartitionVerificationErrorVbmeta:
+      return "ErrorCode::kNewPartitionVerificationErrorVbmeta";
+    case ErrorCode::kNewPartitionVerificationErrorVbmetaSystem:
+      return "ErrorCode::kNewPartitionVerificationErrorVbmetaSystem";
+    case ErrorCode::kNewPartitionVerificationErrorVbmetaVendor:
+      return "ErrorCode::kNewPartitionVerificationErrorVbmetaVendor";
+    case ErrorCode::kNewPartitionVerificationErrorRecovery:
+      return "ErrorCode::kNewPartitionVerificationErrorRecovery";
+    /* Ended by Cursor ubuntu 20251226055221243 */
     case ErrorCode::kResumedFlag:
       return "Resumed";
     case ErrorCode::kDevModeFlag:
