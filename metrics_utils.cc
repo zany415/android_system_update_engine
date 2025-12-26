@@ -89,6 +89,23 @@ metrics::AttemptResult GetAttemptResult(ErrorCode code) {
 
     case ErrorCode::kNewRootfsVerificationError:
     case ErrorCode::kNewKernelVerificationError:
+    /* Started by Cursor ubuntu 20251226055221243 */
+    case ErrorCode::kNewPartitionVerificationErrorSystem:
+    case ErrorCode::kNewPartitionVerificationErrorVendor:
+    case ErrorCode::kNewPartitionVerificationErrorProduct:
+    case ErrorCode::kNewPartitionVerificationErrorSystemExt:
+    case ErrorCode::kNewPartitionVerificationErrorOdm:
+    case ErrorCode::kNewPartitionVerificationErrorVendorDlkm:
+    case ErrorCode::kNewPartitionVerificationErrorSystemDlkm:
+    case ErrorCode::kNewPartitionVerificationErrorBoot:
+    case ErrorCode::kNewPartitionVerificationErrorVendorBoot:
+    case ErrorCode::kNewPartitionVerificationErrorInitBoot:
+    case ErrorCode::kNewPartitionVerificationErrorDtbo:
+    case ErrorCode::kNewPartitionVerificationErrorVbmeta:
+    case ErrorCode::kNewPartitionVerificationErrorVbmetaSystem:
+    case ErrorCode::kNewPartitionVerificationErrorVbmetaVendor:
+    case ErrorCode::kNewPartitionVerificationErrorRecovery:
+    /* Ended by Cursor ubuntu 20251226055221243 */
     case ErrorCode::kRollbackNotPossible:
       return metrics::AttemptResult::kVerificationFailed;
 
@@ -204,6 +221,23 @@ metrics::DownloadErrorCode GetDownloadErrorCode(ErrorCode code) {
     case ErrorCode::kDownloadWriteError:
     case ErrorCode::kNewRootfsVerificationError:
     case ErrorCode::kNewKernelVerificationError:
+    /* Started by Cursor ubuntu 20251226055221243 */
+    case ErrorCode::kNewPartitionVerificationErrorSystem:
+    case ErrorCode::kNewPartitionVerificationErrorVendor:
+    case ErrorCode::kNewPartitionVerificationErrorProduct:
+    case ErrorCode::kNewPartitionVerificationErrorSystemExt:
+    case ErrorCode::kNewPartitionVerificationErrorOdm:
+    case ErrorCode::kNewPartitionVerificationErrorVendorDlkm:
+    case ErrorCode::kNewPartitionVerificationErrorSystemDlkm:
+    case ErrorCode::kNewPartitionVerificationErrorBoot:
+    case ErrorCode::kNewPartitionVerificationErrorVendorBoot:
+    case ErrorCode::kNewPartitionVerificationErrorInitBoot:
+    case ErrorCode::kNewPartitionVerificationErrorDtbo:
+    case ErrorCode::kNewPartitionVerificationErrorVbmeta:
+    case ErrorCode::kNewPartitionVerificationErrorVbmetaSystem:
+    case ErrorCode::kNewPartitionVerificationErrorVbmetaVendor:
+    case ErrorCode::kNewPartitionVerificationErrorRecovery:
+    /* Ended by Cursor ubuntu 20251226055221243 */
     case ErrorCode::kSignedDeltaPayloadExpectedError:
     case ErrorCode::kDownloadPayloadPubKeyVerificationError:
     case ErrorCode::kPostinstallBootedFromFirmwareB:
